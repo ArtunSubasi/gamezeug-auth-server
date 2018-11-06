@@ -13,11 +13,16 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'com.palantir.docker' version '0.20.1'
+}
+
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.palantir.docker'
 
 group = 'com.gamezeug'
 version = '0.0.1-SNAPSHOT'
@@ -34,6 +39,9 @@ compileTestKotlin {
 		jvmTarget = "1.8"
 	}
 }
+bootJar {
+	mainClassName = 'com.gamezeug.authserver.AuthServerApplicationKt'
+}
 
 repositories {
 	mavenCentral()
@@ -49,4 +57,15 @@ dependencies {
 	implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("build/dependency")
+}
+docker {
+	name "${bootJar.baseName}"
+	copySpec.from(tasks.unpack.outputs).into("dependency")
+	buildArgs(['DEPENDENCY': "dependency"])
 }
