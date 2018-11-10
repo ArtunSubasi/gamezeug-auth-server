@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server.svg?style=svg)](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server)
+
 # gamezeug-auth-server
 OAuth2 Authorization Server for Gamezeug
 
