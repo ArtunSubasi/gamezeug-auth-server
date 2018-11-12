@@ -2,6 +2,7 @@ buildscript {
 	ext {
 		kotlinVersion = '1.3.0'
 		springBootVersion = '2.1.0.RELEASE'
+		dockerUserId = "artun"
 	}
 	repositories {
 		mavenCentral()
@@ -65,7 +66,7 @@ task unpack(type: Copy) {
 	into("build/dependency")
 }
 docker {
-	name "${bootJar.baseName}"
+	name "${dockerUserId}/${bootJar.baseName}"
 	copySpec.from(tasks.unpack.outputs).into("dependency")
 	buildArgs(['DEPENDENCY': "dependency"])
 }
