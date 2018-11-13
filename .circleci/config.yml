@@ -50,5 +50,5 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PW
         gradle dockerPush
 
-    - deployment:
+    - deploy:
         command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/bin; ./deploy-auth-server.sh"
