@@ -56,4 +56,4 @@ jobs:
         command: ssh-keyscan -H $DROPLET_HOST >> ~/.ssh/known_hosts
 
     - deploy:
-        command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; docker-compose up -d"
+        command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"

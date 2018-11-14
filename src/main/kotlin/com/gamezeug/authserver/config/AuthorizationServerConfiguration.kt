@@ -23,7 +23,7 @@ class AuthorizationServerConfiguration : AuthorizationServerConfigurerAdapter() 
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer?) {
         oauthServer!!.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
-        log.info("Hello, World!")
+        log.info("Hallo, Welt!")
     }
 
     @Throws(Exception::class)
