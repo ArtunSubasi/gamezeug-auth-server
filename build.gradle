@@ -24,6 +24,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
+apply plugin: 'jacoco'
 
 group = 'com.gamezeug'
 version = '0.0.1-SNAPSHOT'
@@ -58,6 +59,16 @@ dependencies {
 	implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+jacoco {
+    toolVersion = "0.8.2"
+}
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        csv.enabled = false
+    }
 }
 
 task unpack(type: Copy) {
