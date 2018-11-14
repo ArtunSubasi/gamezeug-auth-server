@@ -12,25 +12,22 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 @EnableAuthorizationServer
-class AuthorizationServerConfiguration : AuthorizationServerConfigurerAdapter() {
+class AuthorizationServerConfiguration(private val passwordEncoder: BCryptPasswordEncoder) : AuthorizationServerConfigurerAdapter() {
     
     private val log = LoggerFactory.getLogger(AuthorizationServerConfiguration::class.java)
 
-    @Autowired
-    private val passwordEncoder: BCryptPasswordEncoder? = null
-
     @Throws(Exception::class)
-    override fun configure(oauthServer: AuthorizationServerSecurityConfigurer?) {
-        oauthServer!!.tokenKeyAccess("permitAll()")
+    override fun configure(oauthServer: AuthorizationServerSecurityConfigurer) {
+        oauthServer.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
         log.info("Hallo, Welt!")
     }
 
     @Throws(Exception::class)
-    override fun configure(clients: ClientDetailsServiceConfigurer?) {
-        clients!!.inMemory()
+    override fun configure(clients: ClientDetailsServiceConfigurer) {
+        clients.inMemory()
                 .withClient("SampleClientId")
-                .secret(passwordEncoder!!.encode("secret"))
+                .secret(passwordEncoder.encode("secret"))
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read")
                 .autoApprove(true)

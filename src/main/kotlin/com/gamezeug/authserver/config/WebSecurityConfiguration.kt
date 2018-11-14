@@ -27,8 +27,8 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                 .permitAll()
     }
 
-    override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth!!.inMemoryAuthentication()
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.inMemoryAuthentication()
                 .withUser("john")
                 .password(passwordEncoder().encode("doe"))
                 .roles("USER")
