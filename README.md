@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server.svg?style=svg)](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server)
+[![CircleCI](https://img.shields.io/circleci/project/github/ArtunSubasi/gamezeug-auth-server.svg)](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server)
 [![codecov](https://codecov.io/gh/ArtunSubasi/gamezeug-auth-server/branch/master/graph/badge.svg)](https://codecov.io/gh/ArtunSubasi/gamezeug-auth-server)
 [![Latest release](https://img.shields.io/github/release/ArtunSubasi/gamezeug-auth-server.svg)](https://github.com/ArtunSubasi/gamezeug-auth-server/releases/latest)
 
