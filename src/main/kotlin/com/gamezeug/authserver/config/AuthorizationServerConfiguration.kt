@@ -1,5 +1,6 @@
 package com.gamezeug.authserver.config
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -12,6 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @Configuration
 @EnableAuthorizationServer
 class AuthorizationServerConfiguration : AuthorizationServerConfigurerAdapter() {
+    
+    private val log = LoggerFactory.getLogger(AuthorizationServerConfiguration::class.java)
 
     @Autowired
     private val passwordEncoder: BCryptPasswordEncoder? = null
@@ -20,6 +23,7 @@ class AuthorizationServerConfiguration : AuthorizationServerConfigurerAdapter() 
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer?) {
         oauthServer!!.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
+        log.info("Hello, World!")
     }
 
     @Throws(Exception::class)
