@@ -48,6 +48,10 @@ jobs:
     - store_artifacts:
         path: build/reports/jacoco/test
         
+    - run:
+        name: Upload to Codecov
+        command: bash <(curl -s https://codecov.io/bash)
+        
     - setup_remote_docker:
         docker_layer_caching: true
 
