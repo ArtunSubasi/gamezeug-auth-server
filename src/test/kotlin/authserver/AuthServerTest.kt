@@ -1,12 +1,14 @@
 package authserver
 
 import com.gamezeug.authserver.AuthServerApplication
+import cucumber.api.CucumberOptions
 import cucumber.api.java8.En
 import cucumber.api.junit.Cucumber
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
 
 @RunWith(Cucumber::class)
+@CucumberOptions(plugin = arrayOf("pretty", "json:build/cucumber/cucumber.json"))
 class AuthServerTest
 
 @SpringBootTest(classes = arrayOf(AuthServerApplication::class))
