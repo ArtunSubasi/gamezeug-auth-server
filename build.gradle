@@ -18,6 +18,7 @@ buildscript {
 plugins {
 	id 'com.palantir.docker' version '0.20.1'
 	id "org.sonarqube" version "2.6"
+	id 'net.researchgate.release' version '2.6.0'
 }
 
 apply plugin: 'kotlin'
@@ -28,8 +29,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
 apply plugin: 'jacoco'
 
-group = 'com.gamezeug'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 compileKotlin {
 	kotlinOptions {
@@ -91,4 +90,13 @@ docker {
 	name "${dockerUserId}/${bootJar.baseName}"
 	copySpec.from(tasks.unpack.outputs).into("dependency")
 	buildArgs(['DEPENDENCY': "dependency"])
+}
+
+release {
+	failOnCommitNeeded = true
+	failOnPublishNeeded = false
+	failOnSnapshotDependencies = true
+	failOnUnversionedFiles = false
+	failOnUpdateNeeded = false
+	revertOnFail = false
 }
