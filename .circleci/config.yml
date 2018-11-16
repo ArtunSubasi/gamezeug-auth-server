@@ -41,9 +41,19 @@ jobs:
     - run: |
         gradle test
         gradle jacocoTestReport
-      
+        
+    - run:
+        name: Save test results
+        command: |
+          mkdir -p ~/cucumber
+          bundle exec cucumber pretty --format json --out ~/cucumber/tests.cucumber
+        when: always
+        
     - store_test_results:
-        path: build/test-results
+        path: ~/cucumber
+        
+    - store_artifacts:
+        path: ~/cucumber
         
     - store_artifacts:
         path: build/reports/jacoco/test
