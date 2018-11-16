@@ -43,11 +43,12 @@ jobs:
         gradle jacocoTestReport
       
     - store_test_results:
-        path: build/cucumber
+        path: build/reports/cucumber
 
     - store_artifacts:
-        path: build/cucumber
-        
+        path: build/reports/cucumber
+    - store_artifacts:
+        path: build/reports/junit
     - store_artifacts:
         path: build/reports/jacoco/test
         

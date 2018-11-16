@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
 
 @RunWith(Cucumber::class)
-@CucumberOptions(plugin = arrayOf("pretty", "junit:build/cucumber/junit.xml"))
+@CucumberOptions(plugin = arrayOf("pretty", "junit:build/reports/junit/junit.xml", "json:build/reports/cucumber/json.cucumber"))
 class AuthServerTest
 
 @SpringBootTest(classes = arrayOf(AuthServerApplication::class))
