@@ -1,7 +1,7 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/ArtunSubasi/gamezeug-auth-server.svg)](https://circleci.com/gh/ArtunSubasi/gamezeug-auth-server)
 [![codecov](https://codecov.io/gh/ArtunSubasi/gamezeug-auth-server/branch/master/graph/badge.svg)](https://codecov.io/gh/ArtunSubasi/gamezeug-auth-server)
 [![Sonarqube technical debt](https://sonarcloud.io/api/project_badges/measure?project=ArtunSubasi_gamezeug-auth-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=ArtunSubasi_gamezeug-auth-server)
-[![Latest release](https://img.shields.io/github/release/ArtunSubasi/gamezeug-auth-server/all.svg)](https://github.com/ArtunSubasi/gamezeug-auth-server/releases/latest)
+[![Latest release](https://img.shields.io/github/tag/ArtunSubasi/gamezeug-auth-server.svg?label=Latest%20Release)](https://github.com/ArtunSubasi/gamezeug-auth-server/releases/latest)
 
 # gamezeug-auth-server
 OAuth2 Authorization Server for Gamezeug
