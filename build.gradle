@@ -66,6 +66,9 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
+tasks['sonarqube'].with {
+	dependsOn.clear()
+}
 jacoco {
     toolVersion = "0.8.2"
 }

@@ -153,5 +153,6 @@ workflows:
           - test
     - deploy-to-droplets:
         requires: 
+          - analyse
           - deploy-to-docker-hub
 
