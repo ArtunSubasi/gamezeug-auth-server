@@ -117,14 +117,6 @@ jobs:
     - run: |
         docker login -u $DOCKER_USER -p $DOCKER_PW
         gradle dockerPush
-  
-    - add_ssh_keys
-    - run:
-        name: Keyscan to known hosts
-        command: ssh-keyscan -H $DROPLET_HOST >> ~/.ssh/known_hosts
-  
-    - deploy:
-        command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"
       
   deploy-to-droplets:
     executor: gradle_executor
