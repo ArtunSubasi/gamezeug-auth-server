@@ -15,7 +15,7 @@ executors:
       TERM: dumb
 
 jobs:
-  build:
+  compile:
     executor: gradle_executor
     steps:
     - checkout
@@ -34,7 +34,7 @@ jobs:
         - ~/.gradle
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
-    - run: gradle build
+    - run: gradle classes
       
     # Persist the specified paths into the workspace for use in downstream job. 
     - persist_to_workspace:
@@ -103,7 +103,7 @@ jobs:
         paths:
         - build/reports/jacoco
         
-  deployToDockerHub:
+  deploy-to-docker-hub:
     executor: gradle_executor
     steps:
 
@@ -126,7 +126,7 @@ jobs:
     - deploy:
         command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"
       
-  deployToDroplets:
+  deploy-to-droplets:
     executor: gradle_executor
     steps:
     - add_ssh_keys
@@ -141,17 +141,17 @@ workflows:
   version: 2
   workflow:
     jobs:
-    - build
+    - compile
     - test:
         requires: 
-          - build
+          - compile
     - analyse:
         requires: 
           - test
-    - deployToDockerHub:
+    - deploy-to-docker-hub:
         requires: 
           - test
-    - deployToDroplets:
+    - deploy-to-droplets:
         requires: 
-          - deployToDockerHub
+          - deploy-to-docker-hub
 
