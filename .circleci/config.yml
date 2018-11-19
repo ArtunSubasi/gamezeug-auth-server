@@ -2,25 +2,21 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
-jobs:
-  build:
+version: 2.1
+
+executors:
+  gradle_executor: # declares a reusable executor for build and test
     docker:
-    # specify the version you desire here
     - image: circleci/openjdk:8-jdk
-
-    # Specify service dependencies here if necessary
-    # CircleCI maintains a library of pre-built images
-    # documented at https://circleci.com/docs/2.0/circleci-images/
-    # - image: circleci/postgres:9.4
-
     working_directory: ~/repo
-
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
 
+jobs:
+  build:
+    executor: gradle_executor
     steps:
     - checkout
 
@@ -38,35 +34,60 @@ jobs:
         - ~/.gradle
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
-    - run: |
-        gradle test
-        gradle jacocoTestReport
+    - run: gradle build
+        
+  test:
+    executor: gradle_executor
+    steps:
+
+    - run: gradle test
       
     - store_test_results:
         path: build/reports/cucumber
-
+        
     - store_artifacts:
         path: build/reports/cucumber
+        
     - store_artifacts:
         path: build/reports/junit
+        
+  analyse:
+    executor: gradle_executor
+    steps:
+    - run: gradle jacocoTestReport
+  
     - store_artifacts:
         path: build/reports/jacoco/test
-        
+  
     - run:
         name: Upload to Codecov
         command: bash <(curl -s https://codecov.io/bash)
-
+  
     - run:
         name: Sonarqube
         command: gradle sonarqube -Dsonar.login=$SONAR_LOGIN
         
+  deployToDockerHub:
+    executor: gradle_executor
+    steps:
     - setup_remote_docker:
         docker_layer_caching: true
-
+  
     - run: |
         docker login -u $DOCKER_USER -p $DOCKER_PW
         gradle dockerPush
-        
+  
+    - add_ssh_keys
+    - run:
+        name: Keyscan to known hosts
+        command: ssh-keyscan -H $DROPLET_HOST >> ~/.ssh/known_hosts
+  
+    - deploy:
+        command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"
+      
+  deployToDroplets:
+    executor: gradle_executor
+    steps:
     - add_ssh_keys
     - run:
         name: Keyscan to known hosts
@@ -74,3 +95,22 @@ jobs:
 
     - deploy:
         command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
+    - test:
+        requires: 
+          - build
+    - analyse:
+        requires: 
+          - test
+    - deployToDockerHub:
+        requires: 
+          - test
+    - deployToDroplets:
+        requires: 
+          - deployToDockerHub
+
