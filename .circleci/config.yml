@@ -71,7 +71,7 @@ jobs:
         root: .
         # Must be relative path from root
         paths:
-        - build/reports
+        - .
         
   analyse:
     executor: gradle_executor
@@ -101,7 +101,7 @@ jobs:
         root: .
         # Must be relative path from root
         paths:
-        - build/reports/jacoco
+        - .
         
   deploy-to-docker-hub:
     executor: gradle_executor
