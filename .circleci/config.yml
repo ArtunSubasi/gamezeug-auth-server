@@ -8,7 +8,7 @@ executors:
   gradle_executor: # declares a reusable executor for build and test
     docker:
     - image: circleci/openjdk:8-jdk
-    working_directory: ~/repo
+    working_directory: ~/working_dir
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
@@ -35,10 +35,23 @@ jobs:
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
     - run: gradle build
+      
+    # Persist the specified paths into the workspace for use in downstream job. 
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. 
+        # This is a directory on the container which is taken to be the root directory of the workspace.
+        root: workspace
+        # Must be relative path from root
+        paths:
+        - .
         
   test:
     executor: gradle_executor
     steps:
+
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: ~/working_dir/workspace
 
     - run: gradle test
       
@@ -50,10 +63,24 @@ jobs:
         
     - store_artifacts:
         path: build/reports/junit
+
+    # Persist the specified paths into the workspace for use in downstream job. 
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. 
+        # This is a directory on the container which is taken to be the root directory of the workspace.
+        root: workspace
+        # Must be relative path from root
+        paths:
+        - build/reports
         
   analyse:
     executor: gradle_executor
     steps:
+
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: ~/working_dir/workspace
+      
     - run: gradle jacocoTestReport
   
     - store_artifacts:
@@ -66,10 +93,24 @@ jobs:
     - run:
         name: Sonarqube
         command: gradle sonarqube -Dsonar.login=$SONAR_LOGIN
+
+    # Persist the specified paths into the workspace for use in downstream job. 
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. 
+        # This is a directory on the container which is taken to be the root directory of the workspace.
+        root: workspace
+        # Must be relative path from root
+        paths:
+        - build/reports/jacoco
         
   deployToDockerHub:
     executor: gradle_executor
     steps:
+
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: ~/working_dir/workspace
+      
     - setup_remote_docker:
         docker_layer_caching: true
   
