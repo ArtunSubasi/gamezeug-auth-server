@@ -1,7 +1,6 @@
 package com.gamezeug.authserver.config
 
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
@@ -12,26 +11,23 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 @EnableAuthorizationServer
-class AuthorizationServerConfiguration(private val passwordEncoder: BCryptPasswordEncoder) : AuthorizationServerConfigurerAdapter() {
-    
-    private val log = LoggerFactory.getLogger(AuthorizationServerConfiguration::class.java)
+class AuthorizationServerConfiguration(
+        private val passwordEncoder: BCryptPasswordEncoder,
+        @Value("\${OAUTH2_CLIENT_REDIRECT_URI}") private val oauth2ClientRedirectUri: String
+) : AuthorizationServerConfigurerAdapter() {
 
-    @Throws(Exception::class)
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer) {
         oauthServer.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
-        log.info("Hallo, Welt!")
     }
 
-    @Throws(Exception::class)
     override fun configure(clients: ClientDetailsServiceConfigurer) {
         clients.inMemory()
-                .withClient("SampleClientId")
-                .secret(passwordEncoder.encode("secret"))
+                .withClient("gamezeug-tables")
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read")
                 .autoApprove(true)
-                .redirectUris("http://localhost:20000")
+                .redirectUris(oauth2ClientRedirectUri)
                 .accessTokenValiditySeconds(3600)
     }
 
