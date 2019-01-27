@@ -24,6 +24,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                 .authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .permitAll()
     }
 
