@@ -4,7 +4,7 @@
 [![Latest release](https://img.shields.io/github/tag/ArtunSubasi/gamezeug-auth-server.svg?label=Latest%20Release)](https://github.com/ArtunSubasi/gamezeug-auth-server/releases/latest)
 [![Sonarqube technical debt](https://sonarcloud.io/api/project_badges/measure?project=ArtunSubasi_gamezeug-auth-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=ArtunSubasi_gamezeug-auth-server)
 
-# gamezeug-auth-server
+# Authorization Server
 OAuth2 Authorization Server for Gamezeug
 
 ## Starting the authorization flow
