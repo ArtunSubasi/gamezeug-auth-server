@@ -17,14 +17,9 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.requestMatchers()
-                .antMatchers("/login", "/oauth/authorize")
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
+                .antMatchers("/login", "/oauth/authorize").and()
+                .authorizeRequests().anyRequest().authenticated().and()
+                .formLogin().loginPage("/login")
                 .permitAll()
     }
 
