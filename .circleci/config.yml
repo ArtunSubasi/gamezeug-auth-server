@@ -113,24 +113,10 @@ jobs:
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
         at: ~/working_dir
-      
-    - setup_remote_docker:
-        docker_layer_caching: true
   
     - run: |
         docker login -u $DOCKER_USER -p $DOCKER_PW
         gradle dockerPush
-      
-  deploy-to-droplets:
-    executor: gradle_executor
-    steps:
-    - add_ssh_keys
-    - run:
-        name: Keyscan to known hosts
-        command: ssh-keyscan -H $DROPLET_HOST >> ~/.ssh/known_hosts
-
-    - deploy:
-        command: ssh -v $DROPLET_USER@$DROPLET_HOST "cd ~/gamezeug-docker-compose; git pull --ff-only; ./deploy.sh"
 
 workflows:
   version: 2
@@ -146,8 +132,3 @@ workflows:
     - deploy-to-docker-hub:
         requires: 
           - test
-    - deploy-to-droplets:
-        requires: 
-          - analyse
-          - deploy-to-docker-hub
-
