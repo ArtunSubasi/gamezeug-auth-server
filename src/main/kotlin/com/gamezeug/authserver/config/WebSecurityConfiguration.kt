@@ -6,6 +6,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.authentication.AuthenticationManager
+
+
+
 
 @Configuration
 class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
@@ -13,6 +17,11 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Bean
     fun passwordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    override fun authenticationManagerBean(): AuthenticationManager {
+        return super.authenticationManagerBean()
     }
 
     override fun configure(http: HttpSecurity) {
