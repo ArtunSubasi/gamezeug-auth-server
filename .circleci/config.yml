@@ -95,7 +95,7 @@ jobs:
   
     - run:
         name: Sonarqube
-        command: gradle sonarqube -Dsonar.login=$SONAR_LOGIN
+        command: gradle sonarqube
 
     # Persist the specified paths into the workspace for use in downstream job. 
     - persist_to_workspace:
@@ -115,5 +115,6 @@ workflows:
         requires: 
           - compile
     - analyse:
+        context: SonarCloud
         requires: 
           - test
