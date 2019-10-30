@@ -1,1 +1,5 @@
-OAUTH2_CLIENT_REDIRECT_URI: http://localhost:4200
+oauth2:
+  client:
+    redirectUri: http://localhost:4200
+  jwt:
+    jksPassword: YR58P9ZdjVvWuaCK5Rink4ZB

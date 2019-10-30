@@ -31,15 +31,14 @@ import java.security.interfaces.RSAPublicKey
 @EnableAuthorizationServer
 class AuthorizationServerConfiguration(
         @Autowired private val authenticationManager: AuthenticationManager,
-        @Value("\${OAUTH2_CLIENT_REDIRECT_URI}") private val oauth2ClientRedirectUri: String
+        @Value("\${oauth2.client.redirectUri}") private val clientRedirectUri: String,
+        @Value("\${oauth2.jwt.jksPassword}") private val jwtJksPassword: String
 ) : AuthorizationServerConfigurerAdapter() {
 
-    private val JWK_KID = "gamezeug-key-id"
+    private val jwkKid = "gamezeug-key-id"
 
     override fun configure(oauthServer: AuthorizationServerSecurityConfigurer) {
-        oauthServer.tokenKeyAccess("permitAll()")
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .checkTokenAccess("isAuthenticated()")
+        oauthServer.passwordEncoder(NoOpPasswordEncoder.getInstance())
     }
 
     override fun configure(clients: ClientDetailsServiceConfigurer) {
@@ -49,7 +48,7 @@ class AuthorizationServerConfiguration(
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read")
                 .autoApprove(true)
-                .redirectUris(oauth2ClientRedirectUri)
+                .redirectUris(clientRedirectUri)
                 .accessTokenValiditySeconds(3600)
     }
 
@@ -67,13 +66,13 @@ class AuthorizationServerConfiguration(
     @Bean
     fun keyPair(): KeyPair {
         val keyStoreFile = ClassPathResource("jwt/gamezeug-jwt.jks")
-        val keyStoreFactory = KeyStoreKeyFactory(keyStoreFile, "YR58P9ZdjVvWuaCK5Rink4ZB".toCharArray())
+        val keyStoreFactory = KeyStoreKeyFactory(keyStoreFile, jwtJksPassword.toCharArray())
         return keyStoreFactory.getKeyPair("gamezeug-oauth-jwt")
     }
 
     @Bean
     fun accessTokenConverter(): JwtAccessTokenConverter {
-        val headers = mapOf("kid" to JWK_KID)
+        val headers = mapOf("kid" to jwkKid)
         return JwtCustomHeadersAccessTokenConverter(headers, keyPair())
     }
 
@@ -91,7 +90,7 @@ class AuthorizationServerConfiguration(
         val builder = RSAKey.Builder(keyPair().public as RSAPublicKey)
                 .keyUse(KeyUse.SIGNATURE)
                 .algorithm(JWSAlgorithm.RS256)
-                .keyID(JWK_KID)
+                .keyID(jwkKid)
         return JWKSet(builder.build())
     }
 
